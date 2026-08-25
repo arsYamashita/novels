@@ -182,7 +182,7 @@ DATA.forEach((w,wi)=>{
     const b=document.createElement("button");b.style.setProperty("--wa",w.accent);
     b.id=`e${wi}_${ei}`;
     b.innerHTML=`<span class="n">${ei+1}</span><span>${esc(e.title.replace(/^第.+?話　/,''))}</span>`;
-    b.onclick=()=>open(wi,ei);
+    b.onclick=()=>openEp(wi,ei);
     ec.appendChild(b);
   });
 });
@@ -197,7 +197,7 @@ function landing(){
   let total=0,eps=0;DATA.forEach(w=>{w.eps.forEach(e=>total+=e.chars);eps+=w.eps.length;});
   const cards=DATA.map((w,wi)=>{
     const c=w.eps.reduce((a,e)=>a+e.chars,0);
-    return `<button class="wcard" style="--wa:${w.accent}" onclick="open(${wi},0)">
+    return `<button class="wcard" style="--wa:${w.accent}" onclick="openEp(${wi},0)">
       <div class="g" style="--wa:${w.accent}">${esc(w.genre)}</div>
       <h3>${esc(w.title)}</h3><div class="s">${esc(w.sub)}</div>
       <div class="m">全${w.eps.length}話 ・ 約${fmt(Math.round(c/1000))}千字 ・ 完結</div></button>`;
@@ -214,7 +214,7 @@ function landing(){
   document.querySelectorAll(".eps button").forEach(b=>b.classList.remove("active"));
 }
 
-window.open=function(wi,ei){
+function openEp(wi,ei){
   const w=DATA[wi],e=w.eps[ei];cur={w:wi,e:ei};
   document.documentElement.style.setProperty("--accent",w.accent);
   // shelf state
@@ -231,9 +231,9 @@ window.open=function(wi,ei){
   }).join("");
   const prev=ei>0, next=ei<w.eps.length-1;
   const nav=`<div class="nav">
-    <button ${prev?"":"disabled"} onclick="open(${wi},${ei-1})">
+    <button ${prev?"":"disabled"} onclick="openEp(${wi},${ei-1})">
       <div class="lb">前の話</div><div class="tt">${prev?esc(w.eps[ei-1].title):"―"}</div></button>
-    <button class="next" ${next?"":"disabled"} onclick="open(${wi},${ei+1})">
+    <button class="next" ${next?"":"disabled"} onclick="openEp(${wi},${ei+1})">
       <div class="lb">次の話</div><div class="tt">${next?esc(w.eps[ei+1].title):"（完結）"}</div></button>
   </div>`;
   $("#view").innerHTML=`<article class="reader">
